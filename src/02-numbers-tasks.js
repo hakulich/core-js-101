@@ -53,8 +53,6 @@ function getAverage(value1, value2) {
   return ((value1 / 2 + value2 / 2) / 2) * 2;
 }
 
-console.log(getAverage(-3, 3));
-
 /**
  * Returns a distance between two points by cartesian coordinates.
  *
