@@ -436,8 +436,11 @@ function sortCitiesArray(/* arr */) {
  *           [0,0,0,1,0],
  *           [0,0,0,0,1]]
  */
-function getIdentityMatrix(/* n */) {
-  throw new Error('Not implemented');
+function getIdentityMatrix(n) {
+  let matrix = Array(n).fill(Array(n).fill(0));
+  matrix = matrix.map((a, aI) => a.map((e, eI) => (aI === eI ? 1 : e)));
+
+  return matrix;
 }
 
 /**
@@ -453,8 +456,12 @@ function getIdentityMatrix(/* n */) {
  *     0, 100 => [ 0, 1, 2, ..., 100 ]
  *     3, 3   => [ 3 ]
  */
-function getIntervalArray(/* start, end */) {
-  throw new Error('Not implemented');
+function getIntervalArray(start, end) {
+  let arr = Array(end - start + 1).fill(0);
+
+  arr = arr.map((elm, i) => start + i);
+
+  return arr;
 }
 
 /**
@@ -468,8 +475,9 @@ function getIntervalArray(/* start, end */) {
  *   [ 'a', 'a', 'a', 'a' ]  => [ 'a' ]
  *   [ 1, 1, 2, 2, 3, 3, 4, 4] => [ 1, 2, 3, 4]
  */
-function distinct(/* arr */) {
-  throw new Error('Not implemented');
+function distinct(arr) {
+  const set = new Set(arr);
+  return Array.from(set);
 }
 
 /**
@@ -557,8 +565,17 @@ function getElementByIndexes(/* arr, indexes */) {
  *   [ 1, 2, 3, 4, 5, 6, 7, 8 ]   =>  [ 5, 6, 7, 8, 1, 2, 3, 4 ]
  *
  */
-function swapHeadAndTail(/* arr */) {
-  throw new Error('Not implemented');
+function swapHeadAndTail(arr) {
+  if (arr.length === 1) return arr;
+  const isMirrowArr = (arr.length / 2) % 2 === 0;
+  const startPart = arr.slice(0, arr.length / 2);
+  const endPart = isMirrowArr
+    ? arr.slice(arr.length / 2, arr.length)
+    : arr.slice(arr.length / 2 + 1, arr.length);
+
+  return isMirrowArr
+    ? endPart.concat(startPart)
+    : endPart.concat(arr[Math.floor(arr.length / 2)], startPart);
 }
 
 module.exports = {
