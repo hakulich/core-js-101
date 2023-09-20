@@ -34,8 +34,10 @@ function findElement(arr, value) {
  *    2 => [ 1, 3 ]
  *    5 => [ 1, 3, 5, 7, 9 ]
  */
-function generateOdds(/* len */) {
-  throw new Error('Not implemented');
+function generateOdds(len) {
+  const newArray = Array.from({ length: len * 2 }, (value, index) => index);
+
+  return newArray.filter((x) => x % 2 !== 0);
 }
 
 /**
@@ -193,8 +195,10 @@ function getTail(arr, n) {
  *    +'20,21,22,23,24\n'
  *    +'30,31,32,33,34'
  */
-function toCsvText(/* arr */) {
-  throw new Error('Not implemented');
+function toCsvText(arr) {
+  const str = arr.reduce((acc, elm) => `${acc}${elm.join(',')}\n`, '');
+
+  return str.substr(0, str.length - 1);
 }
 
 /**
@@ -319,8 +323,23 @@ function getPositivesCount(arr) {
  *   [ 'nine','eight','nine','eight'] => [ 'eight','eight','nine','nine']
  *   [ 'one','one','one','zero' ]     => [ 'zero','one','one','one' ]
  */
-function sortDigitNamesByNumericOrder(/* arr */) {
-  throw new Error('Not implemented');
+function sortDigitNamesByNumericOrder(arr) {
+  const alh = {
+    zero: 0,
+    one: 1,
+    two: 2,
+    three: 3,
+    four: 4,
+    five: 5,
+    six: 6,
+    seven: 7,
+    eight: 8,
+    nine: 9,
+  };
+
+  const res = arr.map((elm) => alh[elm]).sort((a, b) => a - b);
+
+  return res.map((elm) => Object.keys(alh).find((key) => alh[key] === elm));
 }
 
 /**
@@ -414,8 +433,13 @@ function toStringList(arr) {
  *      { country: 'Russia',  city: 'Saint Petersburg' }
  *    ]
  */
-function sortCitiesArray(/* arr */) {
-  throw new Error('Not implemented');
+function sortCitiesArray(arr) {
+  return arr.sort((a, b) => {
+    if (a.country === b.country) {
+      return a.city > b.city ? 1 : -1;
+    }
+    return a.country > b.country ? 1 : -1;
+  });
 }
 
 /**
@@ -527,8 +551,9 @@ function group(/* array, keySelector, valueSelector */) {
  *   [[1, 2], [3, 4], [5, 6]], (x) => x     =>   [ 1, 2, 3, 4, 5, 6 ]
  *   ['one','two','three'], (x) => x.split('')  =>   ['o','n','e','t','w','o','t','h','r','e','e']
  */
-function selectMany(/* arr, childrenSelector */) {
-  throw new Error('Not implemented');
+function selectMany(arr, childrenSelector) {
+  const arrTrn = arr.map((elm) => childrenSelector(elm));
+  return arrTrn.reduce((accum, curr) => accum.concat(curr), []);
 }
 
 /**

@@ -266,8 +266,16 @@ function reverseInteger(num) {
  *   5436468789016589 => false
  *   4916123456789012 => false
  */
-function isCreditCardNumber(/* ccn */) {
-  throw new Error('Not implemented');
+function isCreditCardNumber(ccn) {
+  let arr = ccn.toString().split('').reverse();
+
+  arr = arr.map((elm, index) => ((index + 1) % 2 === 0 ? elm * 2 : elm));
+
+  arr = arr.map((elm) => (elm > 9 ? elm - 9 : elm));
+
+  const sum = arr.reduce((acc, elm) => acc + parseInt(elm, 10), 0);
+
+  return sum % 10 === 0;
 }
 
 /**
@@ -321,8 +329,29 @@ function getDigitalRoot(num) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
+
+function isBracketsBalanced(str) {
+  const brackets = {
+    '[': ']',
+    '(': ')',
+    '{': '}',
+    '<': '>',
+  };
+  const arr = str.split('');
+  const result = [];
+
+  for (let i = 0; i < arr.length; i += 1) {
+    const expBr = brackets[result[result.length - 1]];
+    if (arr[i] === expBr) {
+      result.pop();
+    } else if (arr[i] in brackets) {
+      result.push(arr[i]);
+    } else {
+      return false;
+    }
+  }
+
+  return result.length === 0;
 }
 
 /**
@@ -345,8 +374,40 @@ function isBracketsBalanced(/* str */) {
  *    365, 4  => '11231'
  *    365, 10 => '365'
  */
-function toNaryString(/* num, n */) {
-  throw new Error('Not implemented');
+
+function convertFromDecimal(value, toSystem) {
+  const baseLength = toSystem.length;
+
+  let num = value;
+  const arr = [];
+
+  if (num === 0) return toSystem[0];
+
+  while (num > 0) {
+    arr.push(num % baseLength);
+    num = Math.floor(num / baseLength);
+  }
+
+  return arr
+    .reverse()
+    .map((elm) => toSystem[elm])
+    .join('');
+}
+
+function toNaryString(num, n) {
+  const Alphabet = {
+    2: '01',
+    3: '012',
+    4: '0123',
+    5: '01234',
+    6: '012345',
+    7: '0123456',
+    8: '01234567',
+    9: '012345678',
+    10: '0123456789',
+  };
+
+  return convertFromDecimal(num, Alphabet[n]);
 }
 
 /**
@@ -361,8 +422,25 @@ function toNaryString(/* num, n */) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/verbalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
+function getCommonDirectoryPath(pathes) {
+  let str = '';
+
+  const words = pathes.map((elm) => elm.split('/'));
+
+  for (let i = 0; i < words[0].length; i += 1) {
+    const elm = words[0][i];
+    let isCommon = true;
+    for (let j = 1; j < words.length; j += 1) {
+      if (elm !== words[j][i]) {
+        isCommon = false;
+      }
+    }
+    if (isCommon) {
+      str += `${elm}/`;
+    }
+  }
+
+  return str;
 }
 
 /**
@@ -383,8 +461,22 @@ function getCommonDirectoryPath(/* pathes */) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
+function getMatrixProduct(m1, m2) {
+  const m3 = [];
+  for (let i = 0; i < m1.length; i += 1) {
+    const row = [];
+    for (let j = 0; j < m1.length; j += 1) {
+      let sum = 0;
+      for (let k = 0; k < m2.length; k += 1) {
+        sum += m1[i][k] * m2[k][j];
+      }
+
+      row.push(sum);
+    }
+    m3.push(row);
+  }
+
+  return m3;
 }
 
 /**
@@ -417,8 +509,55 @@ function getMatrixProduct(/* m1, m2 */) {
  *    [    ,   ,    ]]
  *
  */
-function evaluateTicTacToePosition(/* position */) {
-  throw new Error('Not implemented');
+function evaluateTicTacToePosition(position) {
+  // Horizontal Win
+  for (let i = 0; i < position.length; i += 1) {
+    const xNumber = position[i].filter((elm) => elm === 'X').length;
+    const oNumber = position[i].filter((elm) => elm === '0').length;
+    if (xNumber === 3) return 'X';
+    if (oNumber === 3) return 0;
+  }
+
+  // Vertical
+  const x = [0, 0, 0];
+  const o = [0, 0, 0];
+  for (let i = 0; i < position.length; i += 1) {
+    for (let j = 0; j < position[i].length; j += 1) {
+      if (position[i][j] === 'X') x[j] += 1;
+      if (position[i][j] === '0') o[j] += 1;
+    }
+  }
+  const isWin = (arr) => {
+    const winners = arr.filter((elm) => elm === 3).length;
+
+    return winners === 1;
+  };
+  if (isWin(x)) return 'X';
+  if (isWin(o)) return 0;
+
+  // Median
+  const isWinMedian = (val) => {
+    const a = position[0][0];
+    const b = position[1][1];
+    const c = position[2][2];
+    if (a === val && b === val && c === val) {
+      return true;
+    }
+
+    const a2 = position[2][0];
+    const b2 = position[1][1];
+    const c2 = position[0][2];
+    if (a2 === val && b2 === val && c2 === val) {
+      return true;
+    }
+
+    return false;
+  };
+
+  if (isWinMedian('X')) return 'X';
+  if (isWinMedian('0')) return 0;
+
+  return undefined;
 }
 
 module.exports = {
